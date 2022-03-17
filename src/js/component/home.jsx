@@ -1,26 +1,38 @@
 import React from "react";
+import { Formik, Field, Form, ErrorMessage } from "formik";
+import * as Yup from "yup";
 
-//include images into your bundle
-import rigoImage from "../../img/rigo-baby.jpg";
-
-//create your first component
 const Home = () => {
 	return (
-		<div>
-			<h1 className="text-center mt-5">Hello Rigo!</h1>
-			<p>
-				<img src={rigoImage} />
-			</p>
-			<a href="#" className="btn btn-success">
-				If you see this green button... bootstrap is working...
-			</a>
-			<p>
-				Made by{" "}
-				<a href="http://www.4geeksacademy.com">4Geeks Academy</a>, with
-				love!
-			</p>
-		</div>
+		<Formik
+			initialValues={{ password: "", email: "" }}
+			validationSchema={Yup.object({
+				password: Yup.string()
+					.max(15, "Must be 15 characters or less")
+					.required("Required"),
+
+				email: Yup.string()
+					.email("Invalid email address")
+					.required("Required"),
+			})}
+			onSubmit={(values, { setSubmitting }) => {
+				setTimeout(() => {
+					alert(JSON.stringify(values, null, 2));
+					setSubmitting(false);
+				}, 400);
+			}}>
+			<Form>
+				<label htmlFor="email">Email Address</label>
+				<Field name="email" type="email" />
+				<ErrorMessage name="email" />
+
+				<label htmlFor="password">password</label>
+				<Field name="password" type="password" />
+				<ErrorMessage name="password" />
+
+				<button type="submit">Submit</button>
+			</Form>
+		</Formik>
 	);
 };
-
 export default Home;
